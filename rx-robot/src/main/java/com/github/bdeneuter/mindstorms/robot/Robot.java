@@ -6,12 +6,10 @@ import lejos.hardware.port.Port;
 import lejos.hardware.port.UARTPort;
 
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.brick;
-import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.key;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Key.ESCAPE;
+import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.escapeKey;
+import static com.github.bdeneuter.mindstorms.rx.hardware.Motors.mediumMotor;
 import static com.github.bdeneuter.mindstorms.rx.hardware.Port.*;
-import static com.github.bdeneuter.mindstorms.rx.motor.Motors.mediumMotor;
 import static com.github.bdeneuter.mindstorms.rx.sensor.Sensors.irSensor;
-import static rx.schedulers.Schedulers.newThread;
 
 public class Robot {
 
@@ -21,9 +19,10 @@ public class Robot {
 
         listenForShutdown();
 
+        brick().getAudio().systemSound(2);
+
         irSensor(S4)
                 .distance()
-                .subscribeOn(newThread())
                 .filter(distance -> distance < 10)
                 .subscribe(distance -> {
                     mediumMotor(C).forward();
@@ -32,7 +31,6 @@ public class Robot {
 
         irSensor(S4)
                 .distance()
-                .subscribeOn(newThread())
                 .filter(distance -> distance > 10)
                 .subscribe(distance -> {
                     mediumMotor(C).stop();
@@ -44,7 +42,7 @@ public class Robot {
     }
 
     private static void listenForShutdown() {
-        key(ESCAPE).addKeyListener(new KeyListener() {
+        escapeKey().addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(Key k) {
 

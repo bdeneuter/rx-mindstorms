@@ -4,6 +4,8 @@ import lejos.hardware.sensor.SensorMode;
 import rx.Observable;
 import rx.Subscriber;
 
+import static rx.schedulers.Schedulers.newThread;
+
 class Sampler {
 
     private final String name;
@@ -11,7 +13,10 @@ class Sampler {
 
     Sampler(String name, SensorMode sensorMode) {
         this.name = name;
-        this.sample = createSampleObservable(sensorMode).replay(1).refCount();
+        this.sample = createSampleObservable(sensorMode)
+                .subscribeOn(newThread())
+                .replay(1)
+                .refCount();
     }
 
     private Observable<Sample> createSampleObservable(SensorMode sensorMode) {

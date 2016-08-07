@@ -1,6 +1,5 @@
-package com.github.bdeneuter.mindstorms.rx.motor;
+package com.github.bdeneuter.mindstorms.rx.hardware;
 
-import com.github.bdeneuter.mindstorms.rx.hardware.Port;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 

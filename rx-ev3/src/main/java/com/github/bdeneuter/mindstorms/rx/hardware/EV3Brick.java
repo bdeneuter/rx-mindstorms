@@ -13,8 +13,8 @@ public class EV3Brick {
         return brick;
     }
 
-    public static lejos.hardware.Key key(Key key) {
-        return brick().getKey(key.getValue());
+    public static Key escapeKey() {
+        return brick().getKey("Escape");
     }
 
 }
