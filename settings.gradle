@@ -1,0 +1,3 @@
+rootProject.name = 'rx-mindstorms'
+include ':rx-ev3'
+include ':rx-robot'

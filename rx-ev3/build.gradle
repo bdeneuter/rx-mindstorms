@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'com.github.bdeneuter:lejos-ev3-api:0.9.1-beta'
+    compile 'io.reactivex:rxjava:1.1.8'
+}
