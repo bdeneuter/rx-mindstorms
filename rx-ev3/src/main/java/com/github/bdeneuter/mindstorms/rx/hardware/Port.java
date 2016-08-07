@@ -1,6 +1,6 @@
 package com.github.bdeneuter.mindstorms.rx.hardware;
 
-import static com.github.bdeneuter.mindstorms.rx.hardware.Hardware.brick;
+import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.brick;
 
 public enum Port {
 	A, B, C, D, S1, S2, S3, S4;

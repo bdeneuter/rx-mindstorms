@@ -2,7 +2,7 @@ package com.github.bdeneuter.mindstorms.rx.hardware;
 
 import lejos.hardware.*;
 
-public class Hardware {
+public class EV3Brick {
 
     private static Brick brick;
 

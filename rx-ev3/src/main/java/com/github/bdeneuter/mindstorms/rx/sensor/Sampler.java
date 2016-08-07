@@ -2,36 +2,39 @@ package com.github.bdeneuter.mindstorms.rx.sensor;
 
 import lejos.hardware.sensor.SensorMode;
 import rx.Observable;
+import rx.Subscriber;
 
 class Sampler {
 
-    private final SensorMode sensorMode;
-    private final Sample sample;
+    private final String name;
+    private final Observable<Sample> sample;
 
-    private boolean stopped;
-
-    Sampler(SensorMode sensorMode) {
-        this.sensorMode = sensorMode;
-        this.sample = new Sample(new float[sensorMode.sampleSize()], 0);
+    Sampler(String name, SensorMode sensorMode) {
+        this.name = name;
+        this.sample = createSampleObservable(sensorMode).replay(1).refCount();
     }
 
-    Observable<Sample> sample() {
-        System.out.println("Start sampling");
+    private Observable<Sample> createSampleObservable(SensorMode sensorMode) {
         return Observable.create(subscriber -> {
             try {
-                while (!stopped) {
-                    sensorMode.fetchSample(sample.values, sample.offset);
-                    subscriber.onNext(sample);
-                }
-                subscriber.onCompleted();
+                sample(sensorMode, subscriber);
             } catch (Exception e) {
                 subscriber.onError(e);
             }
         });
     }
 
-    void stop() {
-        System.out.println("Stop sampling");
-        stopped = true;
+    private void sample(SensorMode sensorMode, Subscriber<? super Sample> subscriber) {
+        System.out.println("Start sampling " + name);
+        Sample sample = new Sample(new float[sensorMode.sampleSize()], 0);
+        while (!subscriber.isUnsubscribed()) {
+            sensorMode.fetchSample(sample.values, sample.offset);
+            subscriber.onNext(sample);
+        }
+        System.out.println("Stop sampling " + name);
+    }
+
+    Observable<Sample> sample() {
+        return sample;
     }
 }
