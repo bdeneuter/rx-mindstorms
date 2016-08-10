@@ -7,8 +7,9 @@ import lejos.hardware.port.UARTPort;
 
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.brick;
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.escapeKey;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Motors.mediumMotor;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Port.*;
+import static com.github.bdeneuter.mindstorms.rx.hardware.Port.S3;
+import static com.github.bdeneuter.mindstorms.rx.hardware.Port.S4;
+import static com.github.bdeneuter.mindstorms.rx.sensor.Sensors.colorSensor;
 import static com.github.bdeneuter.mindstorms.rx.sensor.Sensors.irSensor;
 
 public class Robot {
@@ -23,21 +24,16 @@ public class Robot {
 
         irSensor(S4)
                 .distance()
-                .filter(distance -> distance < 10)
-                .subscribe(distance -> {
-                    mediumMotor(C).forward();
-                    mediumMotor(B).forward();
-                });
+                .filter(distance -> distance == 5)
+                .subscribe(System.out::println);
 
-        irSensor(S4)
-                .distance()
-                .filter(distance -> distance > 10)
-                .subscribe(distance -> {
-                    mediumMotor(C).stop();
-                    mediumMotor(B).stop();
-                });
+        colorSensor(S3)
+                .colorId()
+                .subscribe(System.out::println);
 
-        Thread.sleep(20000);
+
+
+        Thread.sleep(200000);
 
     }
 

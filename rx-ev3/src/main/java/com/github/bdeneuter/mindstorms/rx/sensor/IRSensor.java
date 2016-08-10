@@ -11,9 +11,10 @@ public class IRSensor {
     private final Observable<Float> distance;
 
     IRSensor(EV3IRSensor sensor) {
-        this.distance = new Sampler("IRSensor", sensor.getDistanceMode())
+        this.distance = new Sampler(() -> sensor.getDistanceMode())
                 .sample()
-                .map(sample -> sample.values[sample.offset]);
+                .map(sample -> sample.values[sample.offset])
+                .distinctUntilChanged();
     }
 
     /**

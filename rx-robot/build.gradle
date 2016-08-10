@@ -9,4 +9,5 @@ mindstorms {
 
 dependencies {
     compile project(':rx-ev3')
+    compile 'com.google.guava:guava:19.0'
 }
