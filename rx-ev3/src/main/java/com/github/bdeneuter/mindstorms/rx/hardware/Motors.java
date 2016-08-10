@@ -8,21 +8,21 @@ import java.util.Map;
 
 public class Motors {
 
-    private static EV3LargeRegulatedMotor largeMotor;
-    private static Map<Port, EV3MediumRegulatedMotor> mediumMotor = new HashMap<>();
+    private static Motor largeMotor;
+    private static Map<Port, Motor> mediumMotor = new HashMap<>();
 
-    public static synchronized EV3MediumRegulatedMotor mediumMotor(Port port) {
-        EV3MediumRegulatedMotor motor = mediumMotor.get(port);
+    public static synchronized Motor mediumMotor(Port port) {
+        Motor motor = mediumMotor.get(port);
         if (motor == null) {
-            motor = new EV3MediumRegulatedMotor(port.getPort());
+            motor = new Motor(new EV3MediumRegulatedMotor(port.getPort()));
             mediumMotor.put(port, motor);
         }
         return motor;
     }
 
-    public static synchronized EV3LargeRegulatedMotor largeMotor(Port port) {
+    public static synchronized Motor largeMotor(Port port) {
         if (largeMotor == null) {
-            largeMotor = new EV3LargeRegulatedMotor(port.getPort());
+            largeMotor = new Motor(new EV3LargeRegulatedMotor(port.getPort()));
         }
         return largeMotor;
     }
