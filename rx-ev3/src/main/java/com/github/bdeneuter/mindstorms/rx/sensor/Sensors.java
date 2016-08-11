@@ -1,9 +1,6 @@
 package com.github.bdeneuter.mindstorms.rx.sensor;
 
 import com.github.bdeneuter.mindstorms.rx.hardware.Port;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3IRSensor;
-import lejos.hardware.sensor.EV3TouchSensor;
 
 public class Sensors {
 
@@ -14,7 +11,7 @@ public class Sensors {
     public static IRSensor irSensor(Port port) {
         if (irSensor == null) {
             System.out.println("Create IRSensor");
-            irSensor = new IRSensor(new EV3IRSensor(port.getPort()));
+            irSensor = new IRSensor(port);
         }
         return irSensor;
     }
@@ -22,7 +19,7 @@ public class Sensors {
     public static ColorSensor colorSensor(Port port) {
         if (colorSensor == null) {
             System.out.println("Create ColorSensor");
-            colorSensor = new ColorSensor(new EV3ColorSensor(port.getPort()));
+            colorSensor = new ColorSensor(port);
         }
         return colorSensor;
     }
@@ -30,7 +27,7 @@ public class Sensors {
     public static TouchSensor touchSensor(Port port) {
         if (touchSensor == null) {
             System.out.println("Create TouchSensor");
-            touchSensor = new TouchSensor(new EV3TouchSensor(port.getPort()));
+            touchSensor = new TouchSensor(port);
         }
         return touchSensor;
     }

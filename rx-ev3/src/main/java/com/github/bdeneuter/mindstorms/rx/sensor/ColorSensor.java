@@ -1,5 +1,6 @@
 package com.github.bdeneuter.mindstorms.rx.sensor;
 
+import com.github.bdeneuter.mindstorms.rx.hardware.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.Color;
 import rx.Observable;
@@ -12,15 +13,23 @@ public class ColorSensor {
     private final Observable<ColorId> colorId;
     private final Observable<Color> color;
 
-    ColorSensor(EV3ColorSensor sensor) {
-        colorId = new Sampler(() -> sensor.getColorIDMode())
-                .sample()
+    ColorSensor(Port port) {
+        colorId = Observable.using(
+                        () -> createSensor(port),
+                        sensor -> new Sampler(() -> sensor.getColorIDMode()).sample(),
+                        sensor -> closeSensor(sensor)
+                )
+                .share()
                 .map(sample -> sample.values[sample.offset])
                 .map(ColorId::colorId)
                 .distinctUntilChanged();
 
-        this.color = new Sampler(() -> sensor.getRGBMode())
-                .sample()
+        this.color = Observable.using(
+                        () -> createSensor(port),
+                        sensor -> new Sampler(() -> sensor.getRGBMode()).sample(),
+                        sensor -> closeSensor(sensor)
+                )
+                .share()
                 .map(sample -> new Color(
                         Math.round(sample.values[sample.offset]),
                         Math.round(sample.values[sample.offset + 1]),
@@ -29,6 +38,16 @@ public class ColorSensor {
                         "r: " + color.getRed() +
                                 ", g: " + color.getGreen() +
                                 ", b: " + color.getBlue() );
+    }
+
+    private EV3ColorSensor createSensor(Port port) {
+        System.out.println("Create LeJOS color sensor");
+        return new EV3ColorSensor(port.getPort());
+    }
+
+    private void closeSensor(EV3ColorSensor sensor) {
+        System.out.println("Close LeJOS color sensor");
+        sensor.close();
     }
 
     /**

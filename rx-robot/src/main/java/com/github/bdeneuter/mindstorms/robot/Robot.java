@@ -4,6 +4,7 @@ import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.UARTPort;
+import rx.Subscription;
 
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.brick;
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.escapeKey;
@@ -29,6 +30,16 @@ public class Robot {
 //                .colorId()
 //                .subscribe(System.out::println);
 
+
+        Subscription subscription = touchSensor(S3)
+                .touched()
+                .subscribe(System.out::println);
+
+        Thread.sleep(10000);
+
+        subscription.unsubscribe();
+
+        Thread.sleep(2000);
 
         touchSensor(S3)
                 .touched()
