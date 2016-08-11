@@ -1,22 +1,14 @@
 package com.github.bdeneuter.mindstorms.robot;
 
-import com.github.bdeneuter.mindstorms.rx.sensor.ColorId;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.UARTPort;
-import rx.Observable;
 
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.brick;
 import static com.github.bdeneuter.mindstorms.rx.hardware.EV3Brick.escapeKey;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Motors.mediumMotor;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Movement.FORWARD;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Movement.STOP;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Port.B;
-import static com.github.bdeneuter.mindstorms.rx.hardware.Port.C;
 import static com.github.bdeneuter.mindstorms.rx.hardware.Port.S3;
-import static com.github.bdeneuter.mindstorms.rx.sensor.ColorId.RED;
-import static com.github.bdeneuter.mindstorms.rx.sensor.Sensors.colorSensor;
+import static com.github.bdeneuter.mindstorms.rx.sensor.Sensors.touchSensor;
 
 public class Robot {
 
@@ -33,22 +25,14 @@ public class Robot {
                 .filter(distance -> distance == 5)
                 .subscribe(System.out::println); */
 
-        Observable<ColorId> red = colorSensor(S3)
-                .colorId()
-                .filter(colorId -> colorId == RED);
+//        colorSensor(S3)
+//                .colorId()
+//                .subscribe(System.out::println);
 
-        Observable<ColorId> otherColor = colorSensor(S3)
-                .colorId()
-                .filter(colorId -> colorId != RED);
 
-        mediumMotor(B).connect(red.map(colorId -> FORWARD));
-        mediumMotor(C).connect(red.map(colorId -> FORWARD));
-
-        mediumMotor(B).connect(otherColor.map(colorId -> STOP));
-        mediumMotor(C).connect(otherColor.map(colorId -> STOP));
-
-        mediumMotor(B).activate();
-        mediumMotor(C).activate();
+        touchSensor(S3)
+                .touched()
+                .subscribe(System.out::println);
 
         Thread.sleep(200000);
 
